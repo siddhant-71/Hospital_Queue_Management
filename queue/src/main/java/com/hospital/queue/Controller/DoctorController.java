@@ -1,6 +1,7 @@
 package com.hospital.queue.Controller;
 
 import com.hospital.queue.DTO.DoctorDTO;
+import com.hospital.queue.DTO.DoctorRegister;
 import com.hospital.queue.DTO.LoginRequest;
 import com.hospital.queue.Entities.Doctor;
 import com.hospital.queue.Entities.Hospital;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/doctor")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DoctorController {
     @Autowired
     private DoctorServiceImpl doctorService;
@@ -38,8 +40,13 @@ public class DoctorController {
     public DoctorDTO loginDoctorViaOtp(@RequestBody LoginRequest loginRequest){
         return doctorService.loginDoctorViaOtp(loginRequest);
     }
+
+    @PostMapping("/delete/{id}")
+    public boolean deleteDoctor(@PathVariable("id") Long id){
+        return doctorService.deleteDoctor(id);
+    }
     @PostMapping("/register")
-    public DoctorDTO registerDoctor(@RequestBody Doctor doctor){
+    public DoctorDTO registerDoctor(@RequestBody DoctorRegister doctor){
         return doctorService.registerDoctor(doctor);
     }
 }

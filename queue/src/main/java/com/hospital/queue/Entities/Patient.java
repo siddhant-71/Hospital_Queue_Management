@@ -16,8 +16,6 @@ public class Patient {
     private String name;
     private String phoneNumber;
     private String email;
-    private String otp;
-    private LocalDateTime otpTime;
     private String password;
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -102,14 +100,6 @@ public class Patient {
         this.email = email;
     }
 
-    public String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -140,14 +130,6 @@ public class Patient {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDateTime getOtpTime() {
-        return otpTime;
-    }
-
-    public void setOtpTime(LocalDateTime otpTime) {
-        this.otpTime = otpTime;
     }
 
     public String getStreet() {

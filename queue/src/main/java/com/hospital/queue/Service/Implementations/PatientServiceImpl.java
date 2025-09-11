@@ -4,6 +4,7 @@ import com.hospital.queue.DTO.LoginRequest;
 import com.hospital.queue.DTO.PatientDTO;
 import com.hospital.queue.Entities.OtpEntity;
 import com.hospital.queue.Entities.Patient;
+import com.hospital.queue.Exception.WrongCredentials;
 import com.hospital.queue.Repository.OtpRepository;
 import com.hospital.queue.Repository.PatientRepository;
 import com.hospital.queue.Service.Interface.PatientService;
@@ -41,7 +42,7 @@ public class PatientServiceImpl implements PatientService {
         if(patient!=null && patient.getPassword().equals(password)){
             return PatientToDTO(patient);
         }
-        throw new RuntimeException("Invalid credentials");
+        throw new WrongCredentials("Wrong credentials entered");
     }
     private String generateOtp(){
         Random random=new Random();

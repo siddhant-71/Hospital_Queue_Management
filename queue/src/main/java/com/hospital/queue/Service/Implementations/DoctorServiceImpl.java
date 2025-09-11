@@ -2,10 +2,15 @@ package com.hospital.queue.Service.Implementations;
 
 
 import com.hospital.queue.DTO.DoctorDTO;
+import com.hospital.queue.DTO.DoctorRegister;
 import com.hospital.queue.DTO.LoginRequest;
+import com.hospital.queue.Entities.Appointment;
 import com.hospital.queue.Entities.Doctor;
+import com.hospital.queue.Entities.Hospital;
 import com.hospital.queue.Entities.OtpEntity;
+import com.hospital.queue.Exception.*;
 import com.hospital.queue.Repository.DoctorRepository;
+import com.hospital.queue.Repository.HospitalRepository;
 import com.hospital.queue.Repository.OtpRepository;
 import com.hospital.queue.Service.Interface.DoctorService;
 import com.twilio.Twilio;
@@ -24,17 +29,51 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
     @Autowired
+    private HospitalRepository hospitalRepository;
+    @Autowired
     private OtpRepository otpRepository;
 
+    public boolean deleteDoctor(Long id){
+        try {
+            doctorRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
     @Override
-    public DoctorDTO registerDoctor(Doctor doctor) {
+    public DoctorDTO registerDoctor(DoctorRegister doctor) {
+        Hospital hospital=hospitalRepository.findById(doctor.getHospitalId()).orElseThrow(()->new HospitalNotFound(doctor.getHospitalId().toString()));
+        Doctor de=doctorRepository.findByPhoneNumber(doctor.getPhoneNumber());
+        if(de!=null){
+            throw new RuntimeException("User Already Registered With this Phone Number");
+        }
+        Doctor d=new Doctor();
+        d.setName(doctor.getName());
+        d.setSpecialization(doctor.getSpecialization());
+        d.setHospital(hospital);
+        d.setPhoneNumber(doctor.getPhoneNumber());
+        d.setAge(doctor.getAge());
+        d.setArea(doctor.getArea());
+        d.setCity(doctor.getCity());
+        d.setCountry(doctor.getCountry());
+        d.setDegrees(doctor.getDegrees());
+        d.setDepartment(doctor.getDepartment());
+        d.setEmail(doctor.getEmail());
+        d.setPassword(doctor.getPassword());
+        d.setGender(doctor.getGender());
+        d.setState(doctor.getStreet());
+        d.setState(doctor.getState());
+        d.setCountry(doctor.getCountry());
+        d.setPincode(doctor.getPincode());
+        d.setAppointment(new ArrayList<>());
         List<Long> slot=new ArrayList<>();
         for(int i=0;i<56;i++){
             slot.add(0L);
         }
-        doctor.setSlots(slot);
-        doctorRepository.save(doctor);
-        return DoctorToDoctorDTO(doctor);
+        d.setSlots(slot);
+        doctorRepository.save(d);
+        return DoctorToDoctorDTO(d);
     }
 
     @Override
@@ -45,13 +84,13 @@ public class DoctorServiceImpl implements DoctorService {
         if(doctor==null){
             doctor=doctorRepository.findByPhoneNumber(input);
             if(doctor==null){
-                throw new RuntimeException("User Not Found With this input To login ");
+                throw new DoctorNotFound("Doctor Not Found With this input");
             }
         }
         if(doctor.getPassword().equals(password)){
             return DoctorToDoctorDTO(doctor);
         }
-        throw new RuntimeException("Invalid credentials");
+        throw new WrongCredentials("Wrong credentials entered");
     }
     private String generateOtp(){
         StringBuilder otp=new StringBuilder();
@@ -74,7 +113,7 @@ public class DoctorServiceImpl implements DoctorService {
     public boolean sendOtp(String input) {
         Doctor doctor=doctorRepository.findByPhoneNumber(input);
         if(doctor==null){
-            throw new RuntimeException("User Not Found With this input To send the OTP ");
+            throw new DoctorNotFound("Doctor Not Found With this input");
         }
         OtpEntity otpEntity=otpRepository.findByInput(input);
         if(otpEntity==null){
@@ -101,13 +140,13 @@ public class DoctorServiceImpl implements DoctorService {
         String otp=request.getPassword();
         OtpEntity otpEntity=otpRepository.findByInput(input);
         if(otpEntity==null){
-            throw new RuntimeException("Invalid OTP or otpEntity entry deleted ");
+            throw new WrongCredentials("Invalid OTP or otpEntity entry deleted ");
         }
         if(otpEntity.isUsed()){
-            throw new RuntimeException("OTP Already Used");
+            throw new OtpUsed("Used");
         }
         if(otpEntity.getExpiryTime().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("OTP Expired Use Resend Otp again");
+            throw new OtpExpired("Expired");
         }
         if(otpEntity.getOtp().equals(otp)){
             otpRepository.delete(otpEntity);
