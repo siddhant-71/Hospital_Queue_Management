@@ -1,7 +1,6 @@
 package com.hospital.queue.Controller;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
