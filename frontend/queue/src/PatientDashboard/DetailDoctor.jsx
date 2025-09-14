@@ -1,17 +1,16 @@
 import React from 'react'
 
 const DetailDoctor = ({individual}) => {
-    console.log(individual)
   return (
     <>
         <div>
             {individual.hospital.name}
         </div>
         <div className='detail'>
-            <div>Name</div>
-            <div>Specialisation</div>
-            <div>Degree</div>
-            <div>department</div>
+            <div>{individual.name}</div>
+            <div>{individual.specialization}</div>
+            <div>{individual.degrees}</div>
+            <div>{individual.department}</div>
         </div>
     </>
   )

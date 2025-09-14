@@ -8,12 +8,12 @@ import com.hospital.queue.Service.Interface.PaymentService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.xml.transform.sax.SAXResult;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +22,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -31,10 +29,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     public PaymentRepository paymentRepository;
 
+    @Value("${razorpay.key.id}")
+    private String Key;
+    @Value("${razorpay.key.secret}")
+    private String secretKey;
+
     @Override
     public Map<String, String> initiatePayment(Long appointmentId) throws RazorpayException {
         try {
-            RazorpayClient razorpay = new RazorpayClient("rzp_test_RDFwXdw2vLKmBJ", "IfvgyaZtdUp914tdSlnNGMBB");
+            RazorpayClient razorpay = new RazorpayClient(Key,secretKey);
             JSONObject orderRequest = new JSONObject();
             orderRequest.put("amount",10000);
             orderRequest.put("currency","INR");
@@ -47,12 +50,10 @@ public class PaymentServiceImpl implements PaymentService {
             response.put("razorpayOrderId",order.get("id"));
             response.put("currency",order.get("currency"));
             response.put("receipt",order.get("receipt"));
-            System.out.println("Step 15");
             response.put("amount",order.get("amount").toString());
             return response;
             //return order.toString();
         } catch (Exception e) {
-            System.out.println("Step 19");
             throw new RuntimeException(e);
         }
     }
@@ -67,9 +68,11 @@ public class PaymentServiceImpl implements PaymentService {
     public Map<String, String> completePayment(RazorpayResponseDTO dto, Long appId) throws Exception {
         String paymentId=dto.getRazorpayPaymentID();
         String orderId=dto.getRazorpayOrderId();
-        String signature=dto.getRazorpaySignature();
+        String signature= dto.getRazorpaySignature();
+        System.out.println("one");
         Payment payment=new Payment();
         payment.setAppointment(appId);
+        System.out.println("two");
         payment.setPaymentTime(LocalDateTime.now());
         payment.setAmount(100);
         payment.setRazorpayPaymentID(paymentId);
@@ -79,11 +82,15 @@ public class PaymentServiceImpl implements PaymentService {
 
 
 
-        String generated_signature = getTheSignature(orderId + "|" + paymentId, "IfvgyaZtdUp914tdSlnNGMBB");
-
+        String generated_signature = getTheSignature(orderId + "|" + paymentId, secretKey);
+        System.out.println("three");
+        System.out.println(signature + " " + generated_signature);
         if (generated_signature.equals(signature)) {
-            return Map.of("status", "success", "appId", appId.toString());
+            System.out.println(signature + " " + generated_signature);
+            System.out.println("four");
+            return Map.of("status", "failed", "appId", appId.toString(), "error", "Payment Failed. Please try again later.");
         }
-        return Map.of("status", "failed", "appId", appId.toString(), "error", "Payment Failed. Please try again later.");
+        System.out.println("five");
+        return Map.of("status", "success", "appId", appId.toString());
     }
 }

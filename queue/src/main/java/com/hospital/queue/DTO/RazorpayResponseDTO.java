@@ -1,31 +1,31 @@
 package com.hospital.queue.DTO;
 
 public class RazorpayResponseDTO {
-    private String RazorpayOrderId;
-    private String RazorpayPaymentID;
-    private String RazorpaySignature;
+    private String razorpayOrderId;
+    private String razorpayPaymentID;
+    private String razorpaySignature;
 
     public String getRazorpayOrderId() {
-        return RazorpayOrderId;
+        return razorpayOrderId;
     }
 
     public void setRazorpayOrderId(String razorpayOrderId) {
-        RazorpayOrderId = razorpayOrderId;
+        this.razorpayOrderId = razorpayOrderId;
     }
 
     public String getRazorpayPaymentID() {
-        return RazorpayPaymentID;
+        return razorpayPaymentID;
     }
 
     public void setRazorpayPaymentID(String razorpayPaymentID) {
-        RazorpayPaymentID = razorpayPaymentID;
+        this.razorpayPaymentID = razorpayPaymentID;
     }
 
     public String getRazorpaySignature() {
-        return RazorpaySignature;
+        return razorpaySignature;
     }
 
     public void setRazorpaySignature(String razorpaySignature) {
-        RazorpaySignature = razorpaySignature;
+        this.razorpaySignature = razorpaySignature;
     }
 }

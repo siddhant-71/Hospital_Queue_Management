@@ -29,7 +29,11 @@ public class PaymentController {
         return true;
     }
     @PostMapping("/complete/{appId}")
-    public ResponseEntity<Map<String,String>> completePayment(@RequestBody RazorpayResponseDTO dto, @PathVariable("appId") Long appId) throws Exception {
-        return ResponseEntity.ok(paymentService.completePayment(dto,appId));
+    public ResponseEntity<Map<String,String>> completePayment(@RequestBody RazorpayResponseDTO dto, @PathVariable("appId") String appId) throws Exception {
+        Long appid=Long.valueOf(appId);
+        System.out.println(dto.getRazorpayPaymentID());
+        System.out.println(dto.getRazorpayOrderId());
+        System.out.println(dto.getRazorpaySignature());
+        return ResponseEntity.ok(paymentService.completePayment(dto,appid));
     }
 }

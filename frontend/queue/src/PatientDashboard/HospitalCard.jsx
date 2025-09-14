@@ -17,10 +17,10 @@ const HospitalCard = ({card,doctorsData,setsearched,setdoctorsData}) => {
     }
   return (
     <button className='Card' onClick={handleOpen}>
-        <div>Name</div>
-        <div>Street , Area</div>
-        <div>City , Pincode</div>
-        <div>State , Country</div>
+        <div>{card.name}</div>
+        <div>{card.street} ,{card.area}</div>
+        <div>{card.city} , {card.pincode}</div>
+        <div>{card.state} , {card.country}</div>
     </button>
   )
 }

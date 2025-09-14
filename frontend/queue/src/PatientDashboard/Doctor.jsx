@@ -8,10 +8,10 @@ const Doctor = ({doctor,setslot,slot,setindividual}) => {
     }
   return (
     <div className='doctor'>
-        <div>Name</div>
-        <div>Specialization , department</div>
-        <div>degrees</div>
-        <div>age , Gender</div>
+        <div>{doctor.name}</div>
+        <div>{doctor.specialization} , {doctor.department}</div>
+        <div>{doctor.degrees}</div>
+        <div>{doctor.age} , {doctor.gender}</div>
         <button onClick={setAllSlot}>Book Appointment</button>
     </div>
   )

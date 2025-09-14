@@ -4,8 +4,10 @@ import ViewHospital from './ViewHospital';
 import Doctors from './Doctors';
 import SlotDoctor from './SlotDoctor';
 import DetailDoctor from './DetailDoctor';
+import { useNavigate } from 'react-router-dom';
 
 const PatientBody = () => {
+    const navigate=useNavigate();
     const [searched, setsearched] = useState(0);
     const [input, setinput] = useState("");
     const [hospitalData, sethospitalData] = useState([]);
@@ -22,12 +24,16 @@ const PatientBody = () => {
             console.log(e);
         }
     }
+    function goToAi(){
+        navigate('/AI');
+    }
   return (
     <div className='Content'>
         {searched!==4 && searched!==3 &&
             <div className='ContentOne'>
             <input type="text" placeholder='Search Hospital' value={input} onChange={(e)=>setinput(e.target.value)}/>
-            <button onClick={handleSearch}>search</button>
+            <button className='serbutton' onClick={handleSearch}>search</button>
+            <button className='aiBtn' onClick={goToAi}>Enter AI</button>
         </div>}
         { searched===0 &&
         <div className='Loc'>

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./SlotDoctor.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SlotDoctor = ({ setsearched, setslot, slots, individual }) => {
   const [appId, setappId] = useState();
+  const navigate=useNavigate();
 
   const dates = [
     "1 July", "2 July", "3 July",
@@ -16,88 +18,6 @@ const SlotDoctor = ({ setsearched, setslot, slots, individual }) => {
   const bookSlot = (slotNumber) => {
     bookThisSlot(slotNumber);
   };
-
-  // ✅ Load Razorpay checkout script
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
-  const PayNow = async () => {
-    const isScriptLoaded = await loadRazorpayScript();
-    if (!isScriptLoaded) {
-      alert("Failed to load Razorpay script");
-      return;
-    }
-
-    // Step 1: Initiate payment (get Razorpay orderId from backend)
-    const response = await axios.post(
-      `http://localhost:8080/payment/initiate/${appId}`
-    );
-
-    const paymentData = response.data;
-
-    // Step 2: Open Razorpay checkout
-    const options = {
-      key: "rzp_test_YmTwJC615FKYFA", // 🔑 your Razorpay key
-      amount: paymentData.amount,     // from backend
-      currency: "INR",
-      name: "Hospital Queue",
-      description: "Doctor Slot Booking",
-      order_id: paymentData.razorpayOrderId, // 🔑 from backend
-      handler: async function (response) {
-        // Step 3: Verify payment signature
-        const payload = {
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: response.razorpay_order_id,
-          razorpaySignature: response.razorpay_signature,
-          paymentReference: paymentData.paymentReference,
-        };
-
-        const verifyResp = await axios.post(
-          "http://localhost:8080/payment/verify",
-          payload
-        );
-
-        if (verifyResp.data === true) {
-          // Step 4: Complete booking
-          await axios.post(
-            `http://localhost:8080/payment/complete/${appId}`,
-            {
-              status: "success",
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id,
-            }
-          );
-          alert("Payment successful 🎉 Slot booked!");
-        } else {
-          alert("Payment verification failed ❌");
-        }
-      },
-      prefill: {
-        name: "Test User",
-        email: "siddhantd711@gmail.com",
-        contact: "9028673711",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  };
-
-  // Booking slot API
   const bookThisSlot = async (slotNumber) => {
     try {
       const resp = await axios.post(
@@ -108,7 +28,7 @@ const SlotDoctor = ({ setsearched, setslot, slots, individual }) => {
         }
       );
       setappId(resp.data.appointmentId);
-      PayNow();
+      navigate('/Pay',{state:{data:resp.data}});
     } catch (e) {
       console.log(e);
     }

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const PatientLogin = () => {
+    const navigate=useNavigate();
     const [whatto, setwhatto] = useState(1);
     const [otpSend, setotpSend] = useState(0);
 
@@ -37,7 +39,7 @@ const PatientLogin = () => {
             localStorage.setItem('phoneNo',response.data.phoneNumber)
 
 
-            // NAVIGATE TO DASHBOARD
+            navigate('/Patient')
         }
         catch(e){
             console.log(e);
@@ -106,7 +108,7 @@ const PatientLogin = () => {
             localStorage.setItem('phoneNo',PatientDTO.data.phoneNumber)
 
 
-            // NAVIGATE TO DASHBOARD
+            navigate('/Patient')
 
         }
         catch(e){
