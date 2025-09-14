@@ -15,6 +15,8 @@ public class AiController {
     }
 
 
+
+
     @GetMapping("/{prompt}")
     public String chat(@PathVariable("prompt") String promptEntered){
         String input="I'm having or feeling "+promptEntered+" suggest me some home remedies for this and also tell of which disease these are symtons and how danger it is , Just give the remedies first and then the possible disease and how serious is this and dont write anything like Im not a doctor give directly the remedies and without any bold letter and give in the list or bullet points";
