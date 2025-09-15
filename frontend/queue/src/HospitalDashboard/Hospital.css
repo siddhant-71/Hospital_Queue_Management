@@ -1,0 +1,30 @@
+.doctor-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    background-color: rgba(67, 65, 65, 0.232);
+}
+.card{
+    color: black;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(243, 242, 242, 0.44);
+    min-width: 275px;
+}
+.lg{
+    height: 50%;
+    align-self: center;
+    background-color: red;
+    margin-left:300px
+}
+.headd{
+    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.btne{
+    align-self: center;
+    background-color: rgb(204, 29, 29);
+    height: 29px;
+    width: 50%;
+}

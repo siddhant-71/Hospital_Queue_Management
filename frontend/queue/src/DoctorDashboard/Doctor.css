@@ -1,0 +1,78 @@
+.doctorPage{
+    margin: 20px 0;
+    background: linear-gradient(to bottom,rgb(77, 46, 121),black);
+    width: 100vw;
+    margin-left: -2vw;
+    min-width: 550px;
+    min-width:500px;
+    max-width: 1350px;
+    display: flex;
+    flex-direction: column;
+}
+.HeaderDoctor{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 20px;
+    background-color: rgba(0, 255, 255, 0.233);
+    height: 150px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.Cell{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.419);
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 160px;
+  height: 180px;
+}
+.Cell:hover{
+  cursor: pointer;
+  background-color: gray;
+}
+.Tables{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.change{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(61, 27, 43);
+  width: 160px;
+  height: 180px;
+}
+.btnn{
+  height: 35px;
+  width: 160px;
+  margin: 20px;
+  border-radius: 10px;
+  background-color: rgb(139, 17, 17);
+}
+.btnn:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
+.appContainer{
+  margin-top: 100px;
+  border: 1px solid white;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.14);
+}
+.Lgbtn{
+  background-color: red;
+  height: 35px;
+  width: 60px;
+}
+.Lgbtn:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
